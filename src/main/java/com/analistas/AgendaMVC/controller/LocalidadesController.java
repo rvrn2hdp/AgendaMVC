@@ -1,7 +1,12 @@
 package com.analistas.AgendaMVC.controller;
 
+import com.analistas.AgendaMVC.model.repository.CiudadRepository;
+import com.analistas.AgendaMVC.model.repository.ProvinciaRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -17,7 +22,15 @@ import org.springframework.ui.Model;
 @Controller
 public class LocalidadesController {
     
+    ProvinciaRepository ProvinciaRepo = new ProvinciaRepository();
+    CiudadRepository CiudadRepo = new CiudadRepository();
+    
+    //@RequestMapping(value = {"/localidades"}, method = RequestMethod.GET)
+    @GetMapping("/localidades")
     public String listar(Model model) {
+        
+        model.addAttribute("subtitulo", "Lista de Localidades");
+        //model.addAttribute("ciudades", model)
         
         return "localidades";
     }
