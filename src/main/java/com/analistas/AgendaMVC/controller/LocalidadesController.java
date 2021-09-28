@@ -32,7 +32,7 @@ public class LocalidadesController {
     public String listar(Model model) {
         
         model.addAttribute("subtitulo", "Lista de Localidades");
-        //model.addAttribute("ciudades", model)
+        model.addAttribute("localidades", CiudadRepo.buscarTodos());
         
         return "localidades";
     }
