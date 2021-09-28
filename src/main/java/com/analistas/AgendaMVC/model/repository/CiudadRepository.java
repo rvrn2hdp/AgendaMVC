@@ -6,6 +6,7 @@ import com.analistas.AgendaMVC.model.domain.Provincia;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,7 +43,7 @@ public class CiudadRepository implements ICrudRepository {
                 ciudades.add(ciudad);
             }
 
-        } catch (Exception e) {
+        } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
 
@@ -51,7 +52,38 @@ public class CiudadRepository implements ICrudRepository {
 
     @Override
     public List<?> buscarPor(String criterio) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        List<Ciudad> ciudades = new ArrayList<>();
+
+        try {
+            cn = new ConexionJDBC().getConnection(nombreBD);
+            //Insegura > String sql = "select * from ciudades where nom like '%" + criterio + "%' or cpa like '%" + criterio + "%'";
+            String sql = "select * from ciudades where nom like ? or cpa like ?";
+
+            PreparedStatement st = cn.prepareStatement(sql);
+
+            //Preparar parámetros
+            criterio = "%" + criterio + "%";
+            st.setString(2, criterio);
+            st.setString(1, criterio);
+
+            ResultSet rs = st.executeQuery();
+
+            while (rs.next()) {
+                Provincia prv = (Provincia) provinciaRepo.buscarPorId(rs.getInt(4));
+                Ciudad ciudad = new Ciudad();
+                ciudad.setNumero(rs.getInt(1));
+                ciudad.setCodigoPostal(rs.getString(2));
+                ciudad.setNombre(rs.getString(3));
+                ciudad.setProvincia(prv);
+
+                ciudades.add(ciudad);
+            }
+            cn.close();
+        } catch (SQLException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+
+        return ciudades;
     }
 
     @Override

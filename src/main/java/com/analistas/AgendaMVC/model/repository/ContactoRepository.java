@@ -24,7 +24,6 @@ public class ContactoRepository implements ICrudRepository {
 
     String nombreBD = "agenda_2021";
     Connection cn;
-
     CiudadRepository ciudadRepo = new CiudadRepository();
 
     @Override
