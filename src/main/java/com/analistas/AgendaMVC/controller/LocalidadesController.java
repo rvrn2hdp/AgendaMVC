@@ -1,5 +1,8 @@
 package com.analistas.AgendaMVC.controller;
 
+import com.analistas.AgendaMVC.model.domain.Ciudad;
+import com.analistas.AgendaMVC.model.domain.Contacto;
+import com.analistas.AgendaMVC.model.domain.Provincia;
 import com.analistas.AgendaMVC.model.repository.CiudadRepository;
 import com.analistas.AgendaMVC.model.repository.ProvinciaRepository;
 import org.springframework.stereotype.Controller;
@@ -47,5 +50,21 @@ public class LocalidadesController {
         model.addAttribute("localidades", CiudadRepo.buscarPor(criterio));
 
         return "localidades";
+    }
+    
+    @RequestMapping(value = "/ciudadform", method = RequestMethod.POST)
+    public String guardarCiudad(Ciudad ciudad, @RequestParam(name = "pro") int idPro, Model model) {
+        
+        if (ciudad.getCodigoPostal().isEmpty()) {
+            model.addAttribute("subtitulo", "Corrija los errores");
+            model.addAttribute("localidades", ProvinciaRepo.buscarTodos());
+            model.addAttribute("errorPro", true);
+        }
+        
+        Provincia provincia = (Provincia) ProvinciaRepo.buscarPorId(idPro);
+        ciudad.setProvincia(provincia);
+        CiudadRepo.guardar(ciudad);
+        
+        return "redirect:/localidades";
     }
 }

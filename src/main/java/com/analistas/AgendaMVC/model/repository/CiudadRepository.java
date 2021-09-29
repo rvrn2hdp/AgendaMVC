@@ -116,7 +116,33 @@ public class CiudadRepository implements ICrudRepository {
 
     @Override
     public void guardar(Object objeto) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        try {
+            Ciudad c = (Ciudad) objeto;
+            cn = new ConexionJDBC().getConnection(nombreBD);
+
+            String sql = "insert into ciudades(cpa, nom, id_pro) values(?, ?, ?);";
+
+            if (c.getNumero() > 0) {
+                sql = "update ciudades "
+                        + "set cpa = ?, nom = ?, id_pro = ?;";
+            }
+
+            PreparedStatement ps = cn.prepareStatement(sql);
+
+            ps.setString(1, c.getCodigoPostal());
+            ps.setString(2, c.getNombre());
+            ps.setInt(3, c.getProvincia().getNumero());
+
+            if (c.getNumero() > 0) {
+                ps.setInt(8, c.getNumero());
+            }
+
+            ps.execute();
+            cn.close();
+        } catch (SQLException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+
     }
 
     @Override

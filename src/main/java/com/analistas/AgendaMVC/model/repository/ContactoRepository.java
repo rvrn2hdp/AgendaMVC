@@ -132,7 +132,7 @@ public class ContactoRepository implements ICrudRepository {
                         ciudad
                 );
             }
-
+            cn.close();
         } catch (Exception e) {
             System.out.println("Error: " + e.getMessage());
         }
@@ -172,7 +172,7 @@ public class ContactoRepository implements ICrudRepository {
 
             ps.execute();
             cn.close();
-        } catch (Exception e) {
+        } catch (SQLException e) {
             System.out.println("Error: " + e.getMessage());
         }
     }
@@ -188,7 +188,7 @@ public class ContactoRepository implements ICrudRepository {
 
             ps.execute();
             cn.close();
-        } catch (Exception e) {
+        } catch (SQLException e) {
             System.out.println("Error: " + e.getMessage());
         }
     }
