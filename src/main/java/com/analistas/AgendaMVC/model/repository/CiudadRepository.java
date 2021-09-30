@@ -147,7 +147,18 @@ public class CiudadRepository implements ICrudRepository {
 
     @Override
     public void borrarPorId(int id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        try {
+            cn = new ConexionJDBC().getConnection(nombreBD);
+            String sql = "delete from ciudades where id = ?;";
+
+            PreparedStatement ps = cn.prepareStatement(sql);
+            ps.setInt(1, id);
+
+            ps.execute();
+            cn.close();
+        } catch (SQLException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
     }
 
 }

@@ -60,7 +60,7 @@ and open the template in the editor.
                             </a>
                         </li>
                         <li class="nav-link ml-4">  
-                            <a th:href="@{/home}" class="nav-link " aria-current="page">
+                            <a th:href="@{/localidades}" class="nav-link " aria-current="page">
                                 <i class="fas fa-map-signs"></i>
                                 <span>Localidades</span>
                             </a>
@@ -113,7 +113,7 @@ and open the template in the editor.
                                 <td th:text="${c.codigoPostal}"></td>
 
                                 <td>
-                                    <a th:href="@{/form/} + ${c.numero}" class="btn btn-sm btn-warning text-light float-end"
+                                    <a th:href="@{/localidadform/} + ${c.numero}" class="btn btn-sm btn-warning text-light float-end"
                                        data-bs-toggle="tooltip" data-bs-placement="bottom"
                                        title="Editar"
                                        >
@@ -122,7 +122,7 @@ and open the template in the editor.
                                     </a>
                                 </td>
                                 <td>
-                                    <a th:href="@{/del/} + ${c.numero}" 
+                                    <a th:href="@{/delete/} + ${c.numero}" 
                                        class="btn btn-sm btn-danger float-end text-light"
                                        data-bs-toggle="tooltip" data-bs-placement="bottom"
                                        title="Borrar"
@@ -137,7 +137,7 @@ and open the template in the editor.
                     </table>
                 </div>
                 <div class="card-footer">
-                    <a th:href="@{/form}" class="btn btn-outline-primary float-sm-end">
+                    <a th:href="@{/localidadform}" class="btn btn-outline-primary float-sm-end">
                         Nueva Localidad
                     </a>
                 </div>

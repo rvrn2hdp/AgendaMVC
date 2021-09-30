@@ -70,7 +70,7 @@
         <div class="container-fluid mt-4 px-4 mb-4">
 
             <div class="card">
-                <form th:action="@{/form}" method="post" th:object="${contacto}">
+                <form th:action="@{/localidadform}" method="post" th:object="${localidades}">
 
                     <div class="card-header">
                         <h4 th:text="${subtitulo}" ></h4>
@@ -79,11 +79,11 @@
                         <div class="row row-cols-1 mb-2">
                             <div class="col col-sm-6">
                                 <div class="form">
-                                    <label for="ape" class="form-label">Apellido</label>
-                                    <input id="ape" type="text" class="form-control" th:field="*{apellido}"
-                                           th:classappend="${errorApe} ? 'alert-danger' : ''"
+                                    <label for="CPa" class="form-label">Codigo Postal</label>
+                                    <input id="CPa" type="text" class="form-control" th:field="*{codigoPostal}"
+                                           th:classappend="${errorCPa} ? 'alert-danger' : ''"
                                            />
-                                    <small class="form-text text-danger" th:if="${errorApe}">El apellido es obligatorio</small>
+                                    <small class="form-text text-danger" th:if="${errorCPa}">El CP es obligatorio</small>
                                 </div>
                             </div>
                             <div class="col col-sm-6">
@@ -93,44 +93,17 @@
                                 </div>
                             </div>
                         </div>
+                        
                         <div class="row row-cols-1 mb-2">
-                            <div class="col col-sm-6">
-                                <div class="form">
-                                    <label for="cel" class="form-label">Celular</label>
-                                    <input id="cel" type="text" class="form-control" th:field="*{telefono}" />
-                                </div>
-                            </div>
-                            <div class="col col-sm-6">
-                                <div class="form">
-                                    <label for="mail" class="form-label">Email</label>
-                                    <input id="mail" type="email" class="form-control" th:field="*{email}" />
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row row-cols-1 mb-2">
-                            <div class="col col-sm-7">
-                                <div class="form">
-                                    <label for="dir" class="form-label">Dirección</label>
-                                    <input id="dir" type="text" class="form-control" th:field="*{domicilio}"/>
-                                </div>
-                            </div>
                             <div class="col col-sm-5">
                                 <div class="form">
-                                    <label for="ciu" class="form-label">Localidad</label>
-                                    <select id="ciu" name="ciu" class="form-control">
-                                        <option th:each="loc : ${localidades}" th:value="${loc.numero}"
-                                                th:text="${loc}" 
-                                                th:attr="selected= ${contacto.numero != 0 and loc.numero == contacto.ciudad.numero ? true : false}"
+                                    <label for="pro" class="form-label">Provincia</label>
+                                    <select id="pro" name="pro" class="form-control">
+                                        <option th:each="pro : ${provincias}" th:value="${pro.numero}"
+                                                th:text="${pro}" 
+                                                th:attr="selected=${ciudad.numero != 0 and pro.numero == ciudad.provincia.numero ? true : false}"
                                                 ></option>
                                     </select>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row row-cols-1 mb-2">
-                            <div class="col col-sm-12">
-                                <div class="form">
-                                    <label for="obs" class="form-label">Notas</label>
-                                    <textarea id="obs" rows="5" class="form-control" th:field="*{notas}" ></textarea>
                                 </div>
                             </div>
                         </div>
@@ -140,7 +113,7 @@
                         <button type="submit" class="btn btn-outline-primary float-end ms-2">
                             Guardar
                         </button>
-                        <a th:href="@{/home}" class="btn btn-outline-secondary float-end">
+                        <a th:href="@{/localidades}" class="btn btn-outline-secondary float-end">
                             Cancelar
                         </a>
                     </div>
