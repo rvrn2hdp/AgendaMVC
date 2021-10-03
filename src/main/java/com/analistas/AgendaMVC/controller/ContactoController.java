@@ -28,7 +28,7 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 public class ContactoController {
 
     ContactoRepository contactoRepo = new ContactoRepository();
-    CiudadRepository CiudadRepo = new CiudadRepository();
+    CiudadRepository ciudadRepo = new CiudadRepository();
 
     @RequestMapping(value = {"/home"}, method = RequestMethod.GET)
     public String listar(Model model) {
@@ -64,11 +64,11 @@ public class ContactoController {
 
         if (contacto.getApellido().isEmpty()) {
             model.addAttribute("subtitulo", "Corrija los errores");
-            model.addAttribute("localidades", CiudadRepo.buscarTodos());
+            model.addAttribute("localidades", ciudadRepo.buscarTodos());
             model.addAttribute("errorApe", true);
         }
 
-        Ciudad localidad = (Ciudad) CiudadRepo.buscarPorId(idCiu);
+        Ciudad localidad = (Ciudad) ciudadRepo.buscarPorId(idCiu);
         contacto.setCiudad(localidad);
         contactoRepo.guardar(contacto);
 
@@ -97,6 +97,6 @@ public class ContactoController {
     
     @ModelAttribute("localidades")
     public List<Ciudad> getLocalidades() {
-        return (List<Ciudad>) CiudadRepo.buscarTodos();
+        return (List<Ciudad>) ciudadRepo.buscarTodos();
     }
 }

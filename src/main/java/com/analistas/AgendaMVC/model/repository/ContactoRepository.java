@@ -155,22 +155,22 @@ public class ContactoRepository implements ICrudRepository {
                         + "where id = ?;";
             }
 
-            PreparedStatement ps = cn.prepareStatement(sql);
+            PreparedStatement sentenciaPreparada = cn.prepareStatement(sql);
 
-            ps.setString(1, c.getApellido());
-            ps.setString(2, c.getNombre());
-            ps.setString(3, c.getTelefono());
-            ps.setString(4, c.getEmail());
-            ps.setString(5, c.getDomicilio());
-            ps.setString(6, c.getNotas());
-            ps.setInt(7, c.getCiudad().getNumero());
+            sentenciaPreparada.setString(1, c.getApellido());
+            sentenciaPreparada.setString(2, c.getNombre());
+            sentenciaPreparada.setString(3, c.getTelefono());
+            sentenciaPreparada.setString(4, c.getEmail());
+            sentenciaPreparada.setString(5, c.getDomicilio());
+            sentenciaPreparada.setString(6, c.getNotas());
+            sentenciaPreparada.setInt(7, c.getCiudad().getNumero());
 
             //Para modificaciones
             if (c.getNumero() > 0) {
-                ps.setInt(8, c.getNumero());
+                sentenciaPreparada.setInt(8, c.getNumero());
             }
 
-            ps.execute();
+            sentenciaPreparada.execute();
             cn.close();
         } catch (SQLException e) {
             System.out.println("Error: " + e.getMessage());

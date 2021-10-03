@@ -42,7 +42,7 @@ public class CiudadRepository implements ICrudRepository {
 
                 ciudades.add(ciudad);
             }
-
+            cn.close();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
@@ -105,8 +105,8 @@ public class CiudadRepository implements ICrudRepository {
                 ciudad.setNombre(rs.getString(3));
                 ciudad.setProvincia(prv);
             }
-
-        } catch (Exception e) {
+            cn.close();
+        } catch (SQLException e) {
             System.out.println(e.getMessage());
             return null;
         }
@@ -116,28 +116,37 @@ public class CiudadRepository implements ICrudRepository {
 
     @Override
     public void guardar(Object objeto) {
+        System.out.println("asd1-repo");
         try {
+            System.out.println("asd1-repo1");
             Ciudad c = (Ciudad) objeto;
+            System.out.println("asd1-repo2");
             cn = new ConexionJDBC().getConnection(nombreBD);
 
             String sql = "insert into ciudades(cpa, nom, id_pro) values(?, ?, ?);";
 
             if (c.getNumero() > 0) {
                 sql = "update ciudades "
-                        + "set cpa = ?, nom = ?, id_pro = ?;";
+                        + "set cpa = ?, nom = ?, id_pro = ? where id = ?;";
             }
 
+            System.out.println("asd1-repo3");
             PreparedStatement ps = cn.prepareStatement(sql);
 
             ps.setString(1, c.getCodigoPostal());
             ps.setString(2, c.getNombre());
             ps.setInt(3, c.getProvincia().getNumero());
-
             if (c.getNumero() > 0) {
-                ps.setInt(8, c.getNumero());
+                ps.setInt(4, c.getNumero());
+
             }
 
+//            if (c.getNumero() > 0) {
+//                ps.setInt(3, c.getNumero());
+//            }
+            System.out.println("asd1-repo4");
             ps.execute();
+
             cn.close();
         } catch (SQLException e) {
             System.out.println("Error: " + e.getMessage());

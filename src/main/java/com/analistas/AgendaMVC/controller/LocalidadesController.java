@@ -26,18 +26,18 @@ import org.springframework.web.bind.annotation.SessionAttributes;
  * @author pcc
  */
 @Controller
-@SessionAttributes("localidades")
+@SessionAttributes("ciudad")
 public class LocalidadesController {
 
-    ProvinciaRepository ProvinciaRepo = new ProvinciaRepository();
-    CiudadRepository CiudadRepo = new CiudadRepository();
+    ProvinciaRepository provinciaRepo = new ProvinciaRepository();
+    CiudadRepository ciudadRepo = new CiudadRepository();
 
     //@RequestMapping(value = {"/localidades"}, method = RequestMethod.GET)
     @GetMapping("/localidades")
     public String listarCiudad(Model model) {
 
         model.addAttribute("subtitulo", "Lista de Localidades");
-        model.addAttribute("localidades", CiudadRepo.buscarTodos());
+        model.addAttribute("localidades", ciudadRepo.buscarTodos());
 
         return "localidades";
     }
@@ -46,7 +46,7 @@ public class LocalidadesController {
     public String nuevaCiudad(Model model) {
 
         model.addAttribute("subtitulo", "Nueva Localidad");
-        model.addAttribute("localidades", new Ciudad());
+        model.addAttribute("ciudad", new Ciudad());
 
         return "localidadform";
     }
@@ -54,10 +54,10 @@ public class LocalidadesController {
     @RequestMapping(value = "/localidadform/{id}", method = RequestMethod.GET)
     public String editarCiudad(@PathVariable("id") int id, Model model) {
 
-        Ciudad ciudad = (Ciudad) CiudadRepo.buscarPorId(id);
+        Ciudad ciudad = (Ciudad) ciudadRepo.buscarPorId(id);
 
         model.addAttribute("subtitulo", "Editar Localidad");
-        model.addAttribute("localidades", ciudad);
+        model.addAttribute("ciudad", ciudad);
 
         return "localidadform";
     }
@@ -65,23 +65,32 @@ public class LocalidadesController {
     @RequestMapping(value = "/localidadform", method = RequestMethod.POST)
     public String guardarCiudad(Ciudad ciudad, @RequestParam(name = "pro") int idPro, Model model) {
 
+        System.out.println("asd");
         if (ciudad.getCodigoPostal().isEmpty()) {
+            System.out.println("1");
             model.addAttribute("subtitulo", "Corrija los errores");
-            model.addAttribute("localidades", ProvinciaRepo.buscarTodos());
+            System.out.println("2");
+            model.addAttribute("localidades", provinciaRepo.buscarTodos());
+            System.out.println("3");
             model.addAttribute("errorCPa", true);
+            System.out.println("4");
         }
 
-        Provincia provincia = (Provincia) ProvinciaRepo.buscarPorId(idPro);
+        System.out.println("5");
+        Provincia provincia = (Provincia) provinciaRepo.buscarPorId(idPro);
+        System.out.println("6");
         ciudad.setProvincia(provincia);
-        CiudadRepo.guardar(ciudad);
+        System.out.println("7");
+        ciudadRepo.guardar(ciudad);
+        System.out.println("8");
 
         return "redirect:/localidades";
     }
     
     @RequestMapping(value = "delete/{id}", method = RequestMethod.GET)
     public String borrarCiudad(@PathVariable("id") int id) {
-        Ciudad ciudad = (Ciudad) CiudadRepo.buscarPorId(id);
-        CiudadRepo.borrarPorId(id);
+        Ciudad ciudad = (Ciudad) ciudadRepo.buscarPorId(id);
+        ciudadRepo.borrarPorId(id);
         
         return "redirect:/localidades";
     }
@@ -92,13 +101,13 @@ public class LocalidadesController {
         model.addAttribute("subtitulo", !criterio.isEmpty()
                 ? "Resultado de busqueda de \"" + criterio + "\""
                 : "Lista de Localidades");
-        model.addAttribute("localidades", CiudadRepo.buscarPor(criterio));
+        model.addAttribute("localidades", ciudadRepo.buscarPor(criterio));
 
         return "localidades";
     }
     
     @ModelAttribute("provincias")
     public List<Provincia> getProvincias() {
-        return (List<Provincia>) ProvinciaRepo.buscarTodos();
+        return (List<Provincia>) provinciaRepo.buscarTodos();
     }
 }

@@ -70,7 +70,7 @@
         <div class="container-fluid mt-4 px-4 mb-4">
 
             <div class="card">
-                <form th:action="@{/localidadform}" method="post" th:object="${localidades}">
+                <form th:action="@{/localidadform}" method="post" th:object="${ciudad}">
 
                     <div class="card-header">
                         <h4 th:text="${subtitulo}" ></h4>
@@ -100,14 +100,13 @@
                                     <label for="pro" class="form-label">Provincia</label>
                                     <select id="pro" name="pro" class="form-control">
                                         <option th:each="pro : ${provincias}" th:value="${pro.numero}"
-                                                th:text="${pro}" 
-                                                th:attr="selected=${ciudad.numero != 0 and pro.numero == ciudad.provincia.numero ? true : false}"
+                                                th:text="${pro}"
+                                                th:attr="selected= ${ciudad.provincia != null and pro.numero == ciudad.provincia.numero}"
                                                 ></option>
                                     </select>
                                 </div>
                             </div>
                         </div>
-
                     </div>
                     <div class="card-footer"> <!--th:href="@{/home}"-->
                         <button type="submit" class="btn btn-outline-primary float-end ms-2">
