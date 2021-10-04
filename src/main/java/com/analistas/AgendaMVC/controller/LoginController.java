@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class LoginController {
     
     UsuarioRepository usuarioRepo = new UsuarioRepository();
+    public static int logged = 0;
     
     //@RequestMapping(value = "/", method = RequestMethod.GET)
     @GetMapping({"/", "/login"}) //Forma abreviada
@@ -42,6 +43,7 @@ public class LoginController {
                 model.addAttribute("error", "ingrese el usuario y la clave");
             } else {
             if(usuarioRepo.esValido(nombre, clave)){
+                logged = 1;
                 return "redirect:/home";
             } else {
                 model.addAttribute("error", "Usuario o clave incorrectos");
