@@ -6,6 +6,7 @@ import com.analistas.AgendaMVC.model.domain.Provincia;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,8 +42,8 @@ public class CiudadRepository implements ICrudRepository {
 
                 ciudades.add(ciudad);
             }
-
-        } catch (Exception e) {
+            cn.close();
+        } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
 
@@ -51,7 +52,38 @@ public class CiudadRepository implements ICrudRepository {
 
     @Override
     public List<?> buscarPor(String criterio) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        List<Ciudad> ciudades = new ArrayList<>();
+
+        try {
+            cn = new ConexionJDBC().getConnection(nombreBD);
+            //Insegura > String sql = "select * from ciudades where nom like '%" + criterio + "%' or cpa like '%" + criterio + "%'";
+            String sql = "select * from ciudades where nom like ? or cpa like ?";
+
+            PreparedStatement st = cn.prepareStatement(sql);
+
+            //Preparar parámetros
+            criterio = "%" + criterio + "%";
+            st.setString(2, criterio);
+            st.setString(1, criterio);
+
+            ResultSet rs = st.executeQuery();
+
+            while (rs.next()) {
+                Provincia prv = (Provincia) provinciaRepo.buscarPorId(rs.getInt(4));
+                Ciudad ciudad = new Ciudad();
+                ciudad.setNumero(rs.getInt(1));
+                ciudad.setCodigoPostal(rs.getString(2));
+                ciudad.setNombre(rs.getString(3));
+                ciudad.setProvincia(prv);
+
+                ciudades.add(ciudad);
+            }
+            cn.close();
+        } catch (SQLException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+
+        return ciudades;
     }
 
     @Override
@@ -73,8 +105,8 @@ public class CiudadRepository implements ICrudRepository {
                 ciudad.setNombre(rs.getString(3));
                 ciudad.setProvincia(prv);
             }
-
-        } catch (Exception e) {
+            cn.close();
+        } catch (SQLException e) {
             System.out.println(e.getMessage());
             return null;
         }
@@ -84,12 +116,53 @@ public class CiudadRepository implements ICrudRepository {
 
     @Override
     public void guardar(Object objeto) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        try {
+            Ciudad ciudad = (Ciudad) objeto;
+            cn = new ConexionJDBC().getConnection(nombreBD);
+
+            String sql = "insert into ciudades(cpa, nom, id_pro) values(?, ?, ?);";
+
+            if (ciudad.getNumero() > 0) {
+                sql = "update ciudades "
+                        + "set cpa = ?, nom = ?, id_pro = ? where id = ?;";
+            }
+
+            PreparedStatement sentenciaPreparada = cn.prepareStatement(sql);
+
+            sentenciaPreparada.setString(1, ciudad.getCodigoPostal());
+            sentenciaPreparada.setString(2, ciudad.getNombre());
+            sentenciaPreparada.setInt(3, ciudad.getProvincia().getNumero());
+            if (ciudad.getNumero() > 0) {
+                sentenciaPreparada.setInt(4, ciudad.getNumero());
+
+            }
+
+//            if (c.getNumero() > 0) {
+//                ps.setInt(3, c.getNumero());
+//            }
+            sentenciaPreparada.execute();
+
+            cn.close();
+        } catch (SQLException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+
     }
 
     @Override
     public void borrarPorId(int id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        try {
+            cn = new ConexionJDBC().getConnection(nombreBD);
+            String sql = "delete from ciudades where id = ?;";
+
+            PreparedStatement ps = cn.prepareStatement(sql);
+            ps.setInt(1, id);
+
+            ps.execute();
+            cn.close();
+        } catch (SQLException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
     }
 
 }

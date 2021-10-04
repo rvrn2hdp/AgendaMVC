@@ -21,7 +21,7 @@ public class ConexionJDBC {
         try {
             return DriverManager.
                     getConnection("jdbc:mysql://localhost/" 
-                            + nombreBD, "root", "1234");
+                            + nombreBD, "root", "root");
         } catch (SQLException ex) {
             Logger.getLogger(ConexionJDBC.class.getName())
                     .log(Level.SEVERE, null, ex);
