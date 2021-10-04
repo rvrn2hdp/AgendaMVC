@@ -1,7 +1,6 @@
 package com.analistas.AgendaMVC.controller;
 
 import com.analistas.AgendaMVC.model.domain.Ciudad;
-import com.analistas.AgendaMVC.model.domain.Contacto;
 import com.analistas.AgendaMVC.model.domain.Provincia;
 import com.analistas.AgendaMVC.model.repository.CiudadRepository;
 import com.analistas.AgendaMVC.model.repository.ProvinciaRepository;
@@ -65,24 +64,15 @@ public class LocalidadesController {
     @RequestMapping(value = "/localidadform", method = RequestMethod.POST)
     public String guardarCiudad(Ciudad ciudad, @RequestParam(name = "pro") int idPro, Model model) {
 
-        System.out.println("asd");
         if (ciudad.getCodigoPostal().isEmpty()) {
-            System.out.println("1");
             model.addAttribute("subtitulo", "Corrija los errores");
-            System.out.println("2");
             model.addAttribute("localidades", provinciaRepo.buscarTodos());
-            System.out.println("3");
             model.addAttribute("errorCPa", true);
-            System.out.println("4");
         }
 
-        System.out.println("5");
         Provincia provincia = (Provincia) provinciaRepo.buscarPorId(idPro);
-        System.out.println("6");
         ciudad.setProvincia(provincia);
-        System.out.println("7");
         ciudadRepo.guardar(ciudad);
-        System.out.println("8");
 
         return "redirect:/localidades";
     }

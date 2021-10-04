@@ -116,36 +116,31 @@ public class CiudadRepository implements ICrudRepository {
 
     @Override
     public void guardar(Object objeto) {
-        System.out.println("asd1-repo");
         try {
-            System.out.println("asd1-repo1");
-            Ciudad c = (Ciudad) objeto;
-            System.out.println("asd1-repo2");
+            Ciudad ciudad = (Ciudad) objeto;
             cn = new ConexionJDBC().getConnection(nombreBD);
 
             String sql = "insert into ciudades(cpa, nom, id_pro) values(?, ?, ?);";
 
-            if (c.getNumero() > 0) {
+            if (ciudad.getNumero() > 0) {
                 sql = "update ciudades "
                         + "set cpa = ?, nom = ?, id_pro = ? where id = ?;";
             }
 
-            System.out.println("asd1-repo3");
-            PreparedStatement ps = cn.prepareStatement(sql);
+            PreparedStatement sentenciaPreparada = cn.prepareStatement(sql);
 
-            ps.setString(1, c.getCodigoPostal());
-            ps.setString(2, c.getNombre());
-            ps.setInt(3, c.getProvincia().getNumero());
-            if (c.getNumero() > 0) {
-                ps.setInt(4, c.getNumero());
+            sentenciaPreparada.setString(1, ciudad.getCodigoPostal());
+            sentenciaPreparada.setString(2, ciudad.getNombre());
+            sentenciaPreparada.setInt(3, ciudad.getProvincia().getNumero());
+            if (ciudad.getNumero() > 0) {
+                sentenciaPreparada.setInt(4, ciudad.getNumero());
 
             }
 
 //            if (c.getNumero() > 0) {
 //                ps.setInt(3, c.getNumero());
 //            }
-            System.out.println("asd1-repo4");
-            ps.execute();
+            sentenciaPreparada.execute();
 
             cn.close();
         } catch (SQLException e) {
